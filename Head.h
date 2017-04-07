@@ -1,4 +1,4 @@
-
+#pragma once
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -17,34 +17,42 @@ using namespace std;
 		}
 		virtual void sort(int arr[], int size)
 		{
-			double fakt = 1.2473309;
-			int step = size - 1;
-			int x;
+			int k;
+			int step = size;
+			int siz = size;
 			while (step > 1)
-			for (int i = 0; i + step < size; ++i)
 			{
-				K++;
-				if (arr[i]>arr[i + step])
+				step /= 1.247f;
+				if (step < 1)
+					step = 1;
+				k = 0;
+				for (int i = 0; i + step < siz; ++i)
 				{
-					swap(arr[i], arr[i + step]);
-					N++;
+					if (arr[i]>arr[i + step])
+					{
+						swap(arr[i], arr[i + step]);
+						k = i;
+						N++;
+					}
+					K++;
 				}
-				step /= fakt;
+				if (step == 1)
+					siz = k + 1;
 			}
-			cout << "ĞÑ‚ÑĞ¾Ñ€Ñ‚Ğ¸Ñ€Ğ¾Ğ²Ğ°Ğ½Ğ½Ñ‹Ğ¹ Ğ¼Ğ°ÑÑĞ¸Ğ²: ";
+			cout << "Ãîòîâûé ìàññèâ: ";
 			for (int k = 0; k < size; ++k)
 			{
 				cout << arr[k] << " ";
 			}
 			cout << endl;
-			cout << "\tĞšĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ° ÑÑ€Ğ°Ğ²Ğ½ĞµĞ½Ğ¸Ğ¹: " << K << endl;
-			cout << "\tĞšĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ¾ Ğ¿ĞµÑ€ĞµÑÑ‚Ğ°Ğ½Ğ¾Ğ²Ğ¾Ğº: " << N << endl;
+			cout << "\tÊîëè÷åñòâî ñğàâíåíèé: " << K << endl;
+			cout << "\tÊîëè÷åñòâî ïåğåñòàíîâîê: " << N << endl;
 			cout << endl;
 			delete[] arr;
 		}
 	private:
-		int N; // ĞšĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ¾ Ğ¿ĞµÑ€ĞµÑÑ‚Ğ°Ğ½Ğ¾Ğ²Ğ¾Ğº
-		int K; //ĞšĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ¾ ÑÑ€Ğ°Ğ²Ğ½ĞµĞ½Ğ¸Ğ¹
+		int N;
+		int K;
 		int* arr;
 	};
 	class Selection : public Sort
@@ -70,87 +78,106 @@ using namespace std;
 				N++;
 			};
 
-			cout << "ĞÑ‚ÑĞ¾Ñ€Ñ‚Ğ¸Ñ€Ğ¾Ğ²Ğ°Ğ½Ğ½Ñ‹Ğ¹ Ğ¼Ğ°ÑÑĞ¸Ğ²: ";
+			cout << "Ãîòîâûé ìàññèâ: ";
 			for (int k = 0; k < size; ++k)
 			{
 				cout << arr[k] << " ";
 			}
 			cout << endl;
-			cout << "\tĞšĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ° ÑÑ€Ğ°Ğ²Ğ½ĞµĞ½Ğ¸Ğ¹: " << K << endl;
-			cout << "\tĞšĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ¾ Ğ¿ĞµÑ€ĞµÑÑ‚Ğ°Ğ½Ğ¾Ğ²Ğ¾Ğº: " << N << endl;
+			cout << "\tÊîëè÷åñòâî ñğàâíåíèé: " << K << endl;
+			cout << "\tÊîëè÷åñòâî ïåğåñòàíîâîê: " << N << endl;
 			cout << endl;
 			delete[] arr;
 		}
 	private:
-		int N; // ĞšĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ¾ Ğ¿ĞµÑ€ĞµÑÑ‚Ğ°Ğ½Ğ¾Ğ²Ğ¾Ğº
-		int K; //ĞšĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ¾ ÑÑ€Ğ°Ğ²Ğ½ĞµĞ½Ğ¸Ğ¹
+		int N;
+		int K;
 		int* arr;
 	};
 	class Merge : public Sort
 	{
 	public:
-		Merge() : arr(0), N(0), K(0)
+		Merge() : arr(0), N(0), K(0), score()
 		{
 		}
 		virtual void sort(int arr[], int size)
-		{	
-			int mid = size / 2;
-			if (size % 2 == 1)
-				mid++;
-			int h = 1;
-			int *c = new int[size] ;
-			int step;
-			while (h < size)
+		{
+			size_t BlockSizeIterator;
+			size_t BlockIterator;
+			size_t LeftBlockIterator;
+			size_t RightBlockIterator;
+			size_t MergeIterator;
+			size_t LeftBorder;
+			size_t MidBorder;
+			size_t RightBorder;
+			for (BlockSizeIterator = 1; BlockSizeIterator < size; BlockSizeIterator *= 2)
 			{
-				step = h;
-				int i = 0;
-				int j = mid;
-				int k = 0;
-				while (step <= mid)
+				K++;
+				for (BlockIterator = 0; BlockIterator < size - BlockSizeIterator; BlockIterator += 2 * BlockSizeIterator)
 				{
-					while ((i < step) && (j < size) && (j < (mid + step)))
-					{
-						if (arr[i] < arr[j])
-						{
-							c[k] = arr[i];
-							i++; k++; N++;
-						}
-						else {
-							c[k] = arr[j];
-							j++; k++; N++;
-						}
-					}
-					while (i < step)
-					{
-						c[k] = arr[i];
-						i++; k++; N++;
-					}
-					while ((j < (mid + step)) && (j<size))
-					{ 
-						c[k] = arr[j];
-						j++; k++; N++;
-					}
-					step = step + h;
 					K++;
+					LeftBlockIterator = 0;
+					RightBlockIterator = 0;
+					LeftBorder = BlockIterator;
+					MidBorder = BlockIterator + BlockSizeIterator;
+					RightBorder = BlockIterator + 2 * BlockSizeIterator;
+					RightBorder = (RightBorder < size) ? RightBorder : size;
+					int* SortedBlock = new int[RightBorder - LeftBorder];
+					while (LeftBorder + LeftBlockIterator < MidBorder && MidBorder + RightBlockIterator < RightBorder)
+					{
+						K++;
+						if (arr[LeftBorder + LeftBlockIterator] < arr[MidBorder + RightBlockIterator])
+						{
+							K++;
+							N++;
+							SortedBlock[LeftBlockIterator + RightBlockIterator] = arr[LeftBorder + LeftBlockIterator];
+							LeftBlockIterator++;
+						}
+						else
+						{	
+							K++;
+							N++;
+							SortedBlock[LeftBlockIterator + RightBlockIterator] = arr[MidBorder + RightBlockIterator];
+							RightBlockIterator++;
+						}
+					}
+					while (LeftBorder + LeftBlockIterator < MidBorder)
+					{
+						N++;
+						K++;
+						SortedBlock[LeftBlockIterator + RightBlockIterator] = arr[LeftBorder + LeftBlockIterator];
+						LeftBlockIterator++;
+					}
+					while (MidBorder + RightBlockIterator < RightBorder)
+					{
+						N++;
+						K++;
+						SortedBlock[LeftBlockIterator + RightBlockIterator] = arr[MidBorder + RightBlockIterator];
+						RightBlockIterator++;
+					}
+					for (MergeIterator = 0; MergeIterator < LeftBlockIterator + RightBlockIterator; MergeIterator++)
+					{
+						K++;
+						N++;
+						arr[LeftBorder + MergeIterator] = SortedBlock[MergeIterator];
+					}
+					delete SortedBlock;
 				}
-				h = h * 2;
-				for (i = 0; i <size; i++)
-					arr[i] = c[i];
 			}
-			cout << "ĞÑ‚ÑĞ¾Ñ€Ñ‚Ğ¸Ñ€Ğ¾Ğ²Ğ°Ğ½Ğ½Ñ‹Ğ¹ Ğ¼Ğ°ÑÑĞ¸Ğ²: ";
+			cout << "Ãîòîâûé ìàññèâ: ";
 			for (int k = 0; k < size; k++)
 			{
 				cout << arr[k] << " ";
 			}
 			cout << endl;
-			cout << "\tĞšĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ° ÑÑ€Ğ°Ğ²Ğ½ĞµĞ½Ğ¸Ğ¹: " << K << endl;
-			cout << "\tĞšĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ¾ Ğ¿ĞµÑ€ĞµÑÑ‚Ğ°Ğ½Ğ¾Ğ²Ğ¾Ğº: " << N << endl;
+			cout << "\tÊîëè÷åñòâo ñğàâíåíèé: " << K << endl;
+			cout << "\tÊîëè÷åñòâî ïåğåñòàíîâîê: " << N << endl;
 			cout << endl;
-			delete[] arr;
-			delete[] c;
+
 		}
 	private:
-		int N; // ĞšĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ¾ Ğ¿ĞµÑ€ĞµÑÑ‚Ğ°Ğ½Ğ¾Ğ²Ğ¾Ğº
-		int K; //ĞšĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ¾ ÑÑ€Ğ°Ğ²Ğ½ĞµĞ½Ğ¸Ğ¹
+		int N;
+		int K;
 		int* arr;
+		int score;
 	};
