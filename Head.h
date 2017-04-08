@@ -45,8 +45,8 @@ using namespace std;
 				cout << arr[k] << " ";
 			}
 			cout << endl;
-			cout << "\tКоличество сравнений: " << K << endl;
-			cout << "\tКоличество перестановок: " << N << endl;
+			cout << "Количество сравнений: " << K << endl;
+			cout << "Количество перестановок: " << N << endl;
 			cout << endl;
 			delete[] arr;
 		}
@@ -74,8 +74,11 @@ using namespace std;
 						min = j;
 					}
 				}
-				swap(arr[i], arr[min]);
-				N++;
+				if (arr[i] != arr[min])
+				{
+					swap(arr[i], arr[min]);
+					N++;
+				}
 			};
 
 			cout << "Готовый массив: ";
@@ -84,8 +87,8 @@ using namespace std;
 				cout << arr[k] << " ";
 			}
 			cout << endl;
-			cout << "\tКоличество сравнений: " << K << endl;
-			cout << "\tКоличество перестановок: " << N << endl;
+			cout << "Количество сравнений: " << K << endl;
+			cout << "Количество перестановок: " << N << endl;
 			cout << endl;
 			delete[] arr;
 		}
@@ -157,8 +160,6 @@ using namespace std;
 					}
 					for (MergeIterator = 0; MergeIterator < LeftBlockIterator + RightBlockIterator; MergeIterator++)
 					{
-						K++;
-						N++;
 						arr[LeftBorder + MergeIterator] = SortedBlock[MergeIterator];
 					}
 					delete SortedBlock;
@@ -170,8 +171,8 @@ using namespace std;
 				cout << arr[k] << " ";
 			}
 			cout << endl;
-			cout << "\tКоличествo сравнений: " << K << endl;
-			cout << "\tКоличество перестановок: " << N << endl;
+			cout << "Количествo сравнений: " << K << endl;
+			cout << "Количество перестановок: " << N << endl;
 			cout << endl;
 
 		}
